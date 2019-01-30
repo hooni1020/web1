@@ -1,0 +1,21 @@
+{
+  "defaultConnection": "default",
+  "connections": {
+    "default": {
+      "connector": "strapi-hook-mongoose",
+      "settings": {
+        "client": "mongo",
+        "host": "ds259865.mlab.com",
+        "srv": false,
+        "port": "59865",
+        "database": "wiznet_test",
+        "username": "admin",
+        "password": "a20051322"
+      },
+      "options": {
+        "authenticationDatabase": "wiznet_test",
+        "ssl": false
+      }
+    }
+  }
+}

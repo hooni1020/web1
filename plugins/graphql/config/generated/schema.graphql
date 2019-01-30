@@ -1,0 +1,658 @@
+type Board {
+  _id: ID!
+  title: String
+  posts(sort: String, limit: Int, start: Int, where: JSON): [Post]
+}
+
+type BoardAggregator {
+  count: Int
+}
+
+type BoardConnection {
+  values: [Board]
+  groupBy: BoardGroupBy
+  aggregate: BoardAggregator
+}
+
+type BoardConnection_id {
+  key: ID
+  connection: BoardConnection
+}
+
+type BoardConnectionTitle {
+  key: String
+  connection: BoardConnection
+}
+
+type BoardGroupBy {
+  _id: [BoardConnection_id]
+  title: [BoardConnectionTitle]
+}
+
+input BoardInput {
+  title: String
+  posts: [ID]
+}
+
+type Comment {
+  _id: ID!
+  content: String
+  user: UsersPermissionsUser
+  post: Post
+}
+
+type CommentAggregator {
+  count: Int
+}
+
+type CommentConnection {
+  values: [Comment]
+  groupBy: CommentGroupBy
+  aggregate: CommentAggregator
+}
+
+type CommentConnection_id {
+  key: ID
+  connection: CommentConnection
+}
+
+type CommentConnectionContent {
+  key: String
+  connection: CommentConnection
+}
+
+type CommentConnectionPost {
+  key: ID
+  connection: CommentConnection
+}
+
+type CommentConnectionUser {
+  key: ID
+  connection: CommentConnection
+}
+
+type CommentGroupBy {
+  _id: [CommentConnection_id]
+  content: [CommentConnectionContent]
+  user: [CommentConnectionUser]
+  post: [CommentConnectionPost]
+}
+
+input CommentInput {
+  content: String
+  user: ID
+  post: ID
+}
+
+input createBoardInput {
+  data: BoardInput
+}
+
+type createBoardPayload {
+  board: Board
+}
+
+input createCommentInput {
+  data: CommentInput
+}
+
+type createCommentPayload {
+  comment: Comment
+}
+
+input createPostInput {
+  data: PostInput
+}
+
+type createPostPayload {
+  post: Post
+}
+
+input createRoleInput {
+  data: RoleInput
+}
+
+type createRolePayload {
+  role: UsersPermissionsRole
+}
+
+input createUserInput {
+  data: UserInput
+}
+
+type createUserPayload {
+  user: UsersPermissionsUser
+}
+
+"""
+The `DateTime` scalar represents a date and time following the ISO 8601 standard
+"""
+scalar DateTime
+
+input deleteBoardInput {
+  where: InputID
+}
+
+type deleteBoardPayload {
+  board: Board
+}
+
+input deleteCommentInput {
+  where: InputID
+}
+
+type deleteCommentPayload {
+  comment: Comment
+}
+
+input deletePostInput {
+  where: InputID
+}
+
+type deletePostPayload {
+  post: Post
+}
+
+input deleteRoleInput {
+  where: InputID
+}
+
+type deleteRolePayload {
+  role: UsersPermissionsRole
+}
+
+input deleteUserInput {
+  where: InputID
+}
+
+type deleteUserPayload {
+  user: UsersPermissionsUser
+}
+
+input editBoardInput {
+  title: String
+  posts: [ID]
+}
+
+input editCommentInput {
+  content: String
+  user: ID
+  post: ID
+}
+
+input editFileInput {
+  name: String
+  hash: String
+  sha256: String
+  ext: String
+  mime: String
+  size: String
+  url: String
+  provider: String
+  public_id: String
+  related: [ID]
+}
+
+input editPostInput {
+  title: String
+  content: String
+  board: ID
+  user: ID
+  comments: [ID]
+}
+
+input editRoleInput {
+  name: String
+  description: String
+  type: String
+  permissions: [ID]
+  users: [ID]
+}
+
+input editUserInput {
+  username: String
+  email: String
+  provider: String
+  password: String
+  resetPasswordToken: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: ID
+  posts: [ID]
+  comments: [ID]
+}
+
+input FileInput {
+  name: String!
+  hash: String!
+  sha256: String
+  ext: String
+  mime: String!
+  size: String!
+  url: String!
+  provider: String!
+  public_id: String
+  related: [ID]
+}
+
+input InputID {
+  id: ID!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Board | createBoardPayload | updateBoardPayload | deleteBoardPayload | BoardConnection | BoardAggregator | BoardGroupBy | BoardConnection_id | BoardConnectionTitle | Comment | createCommentPayload | updateCommentPayload | deleteCommentPayload | CommentConnection | CommentAggregator | CommentGroupBy | CommentConnection_id | CommentConnectionContent | CommentConnectionUser | CommentConnectionPost | Post | createPostPayload | updatePostPayload | deletePostPayload | PostConnection | PostAggregator | PostGroupBy | PostConnection_id | PostConnectionTitle | PostConnectionContent | PostConnectionBoard | PostConnectionUser | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UploadFileConnectionPublic_id | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
+
+type Mutation {
+  createBoard(input: createBoardInput): createBoardPayload
+  updateBoard(input: updateBoardInput): updateBoardPayload
+  deleteBoard(input: deleteBoardInput): deleteBoardPayload
+  createComment(input: createCommentInput): createCommentPayload
+  updateComment(input: updateCommentInput): updateCommentPayload
+  deleteComment(input: deleteCommentInput): deleteCommentPayload
+  createPost(input: createPostInput): createPostPayload
+  updatePost(input: updatePostInput): updatePostPayload
+  deletePost(input: deletePostInput): deletePostPayload
+
+  """Create a new role"""
+  createRole(input: createRoleInput): createRolePayload
+
+  """Update an existing role"""
+  updateRole(input: updateRoleInput): updateRolePayload
+
+  """Delete an existing role"""
+  deleteRole(input: deleteRoleInput): deleteRolePayload
+
+  """Create a new user"""
+  createUser(input: createUserInput): createUserPayload
+
+  """Update an existing user"""
+  updateUser(input: updateUserInput): updateUserPayload
+
+  """Delete an existing user"""
+  deleteUser(input: deleteUserInput): deleteUserPayload
+  upload(refId: ID, ref: String, source: String, file: Upload!): UploadFile!
+}
+
+type Post {
+  _id: ID!
+  title: String
+  content: String
+  board: Board
+  user: UsersPermissionsUser
+  comments(sort: String, limit: Int, start: Int, where: JSON): [Comment]
+}
+
+type PostAggregator {
+  count: Int
+}
+
+type PostConnection {
+  values: [Post]
+  groupBy: PostGroupBy
+  aggregate: PostAggregator
+}
+
+type PostConnection_id {
+  key: ID
+  connection: PostConnection
+}
+
+type PostConnectionBoard {
+  key: ID
+  connection: PostConnection
+}
+
+type PostConnectionContent {
+  key: String
+  connection: PostConnection
+}
+
+type PostConnectionTitle {
+  key: String
+  connection: PostConnection
+}
+
+type PostConnectionUser {
+  key: ID
+  connection: PostConnection
+}
+
+type PostGroupBy {
+  _id: [PostConnection_id]
+  title: [PostConnectionTitle]
+  content: [PostConnectionContent]
+  board: [PostConnectionBoard]
+  user: [PostConnectionUser]
+}
+
+input PostInput {
+  title: String
+  content: String
+  board: ID
+  user: ID
+  comments: [ID]
+}
+
+type Query {
+  board(id: ID!): Board
+  boards(sort: String, limit: Int, start: Int, where: JSON): [Board]
+  boardsConnection(sort: String, limit: Int, start: Int, where: JSON): BoardConnection
+  comment(id: ID!): Comment
+  comments(sort: String, limit: Int, start: Int, where: JSON): [Comment]
+  commentsConnection(sort: String, limit: Int, start: Int, where: JSON): CommentConnection
+  post(id: ID!): Post
+  posts(sort: String, limit: Int, start: Int, where: JSON): [Post]
+  postsConnection(sort: String, limit: Int, start: Int, where: JSON): PostConnection
+  files(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+  filesConnection(sort: String, limit: Int, start: Int, where: JSON): UploadFileConnection
+  role(id: ID!): UsersPermissionsRole
+
+  """
+  Retrieve all the existing roles. You can't apply filters on this query.
+  """
+  roles(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsRole]
+  rolesConnection(sort: String, limit: Int, start: Int, where: JSON): UsersPermissionsRoleConnection
+  user(id: ID!): UsersPermissionsUser
+  users(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsUser]
+  usersConnection(sort: String, limit: Int, start: Int, where: JSON): UsersPermissionsUserConnection
+  me: UsersPermissionsMe
+}
+
+input RoleInput {
+  name: String!
+  description: String
+  type: String
+  permissions: [ID]
+  users: [ID]
+}
+
+input updateBoardInput {
+  where: InputID
+  data: editBoardInput
+}
+
+type updateBoardPayload {
+  board: Board
+}
+
+input updateCommentInput {
+  where: InputID
+  data: editCommentInput
+}
+
+type updateCommentPayload {
+  comment: Comment
+}
+
+input updatePostInput {
+  where: InputID
+  data: editPostInput
+}
+
+type updatePostPayload {
+  post: Post
+}
+
+input updateRoleInput {
+  where: InputID
+  data: editRoleInput
+}
+
+type updateRolePayload {
+  role: UsersPermissionsRole
+}
+
+input updateUserInput {
+  where: InputID
+  data: editUserInput
+}
+
+type updateUserPayload {
+  user: UsersPermissionsUser
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type UploadFile {
+  _id: ID!
+  name: String!
+  hash: String!
+  sha256: String
+  ext: String
+  mime: String!
+  size: String!
+  url: String!
+  provider: String!
+  public_id: String
+  related(sort: String, limit: Int, start: Int, where: JSON): [Morph]
+}
+
+type UploadFileAggregator {
+  count: Int
+}
+
+type UploadFileConnection {
+  values: [UploadFile]
+  groupBy: UploadFileGroupBy
+  aggregate: UploadFileAggregator
+}
+
+type UploadFileConnection_id {
+  key: ID
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionExt {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionHash {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionMime {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionName {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionProvider {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionPublic_id {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionSha256 {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionSize {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionUrl {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileGroupBy {
+  _id: [UploadFileConnection_id]
+  name: [UploadFileConnectionName]
+  hash: [UploadFileConnectionHash]
+  sha256: [UploadFileConnectionSha256]
+  ext: [UploadFileConnectionExt]
+  mime: [UploadFileConnectionMime]
+  size: [UploadFileConnectionSize]
+  url: [UploadFileConnectionUrl]
+  provider: [UploadFileConnectionProvider]
+  public_id: [UploadFileConnectionPublic_id]
+}
+
+input UserInput {
+  username: String!
+  email: String!
+  provider: String
+  password: String
+  resetPasswordToken: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: ID
+  posts: [ID]
+  comments: [ID]
+}
+
+type UsersPermissionsMe {
+  _id: ID!
+  username: String!
+  email: String!
+  confirmed: Boolean
+  blocked: Boolean
+  role: UsersPermissionsMeRole
+}
+
+type UsersPermissionsMeRole {
+  _id: ID!
+  name: String!
+  description: String
+  type: String
+}
+
+type UsersPermissionsPermission {
+  _id: ID!
+  type: String!
+  controller: String!
+  action: String!
+  enabled: Boolean!
+  policy: String
+  role: UsersPermissionsRole
+}
+
+type UsersPermissionsRole {
+  _id: ID!
+  name: String!
+  description: String
+  type: String
+  permissions(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsPermission]
+  users(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsUser]
+}
+
+type UsersPermissionsRoleAggregator {
+  count: Int
+}
+
+type UsersPermissionsRoleConnection {
+  values: [UsersPermissionsRole]
+  groupBy: UsersPermissionsRoleGroupBy
+  aggregate: UsersPermissionsRoleAggregator
+}
+
+type UsersPermissionsRoleConnection_id {
+  key: ID
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleConnectionDescription {
+  key: String
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleConnectionName {
+  key: String
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleConnectionType {
+  key: String
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleGroupBy {
+  _id: [UsersPermissionsRoleConnection_id]
+  name: [UsersPermissionsRoleConnectionName]
+  description: [UsersPermissionsRoleConnectionDescription]
+  type: [UsersPermissionsRoleConnectionType]
+}
+
+type UsersPermissionsUser {
+  _id: ID!
+  username: String!
+  email: String!
+  provider: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: UsersPermissionsRole
+  posts(sort: String, limit: Int, start: Int, where: JSON): [Post]
+  comments(sort: String, limit: Int, start: Int, where: JSON): [Comment]
+}
+
+type UsersPermissionsUserAggregator {
+  count: Int
+}
+
+type UsersPermissionsUserConnection {
+  values: [UsersPermissionsUser]
+  groupBy: UsersPermissionsUserGroupBy
+  aggregate: UsersPermissionsUserAggregator
+}
+
+type UsersPermissionsUserConnection_id {
+  key: ID
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionBlocked {
+  key: Boolean
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionConfirmed {
+  key: Boolean
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionEmail {
+  key: String
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionProvider {
+  key: String
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionRole {
+  key: ID
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionUsername {
+  key: String
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserGroupBy {
+  _id: [UsersPermissionsUserConnection_id]
+  username: [UsersPermissionsUserConnectionUsername]
+  email: [UsersPermissionsUserConnectionEmail]
+  provider: [UsersPermissionsUserConnectionProvider]
+  confirmed: [UsersPermissionsUserConnectionConfirmed]
+  blocked: [UsersPermissionsUserConnectionBlocked]
+  role: [UsersPermissionsUserConnectionRole]
+}
